@@ -29,7 +29,7 @@ def get_summoner(request):
         
         form.save()
        # full = NameForm(your_name = name, your_region = region)
-       
+       #waaa
         return redirect('/autho/data')
         #if form.is_valid():
            # name = form.cleaned_data['your_name']
