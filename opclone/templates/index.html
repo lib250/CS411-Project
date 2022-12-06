@@ -4,9 +4,12 @@
     <body>
         <h1> Google OAuth </h1>
         {% if user.is_authenticated %}
-            <p> Welcome, you are logged in as {{ user.username }} </p>
+            <p> Welcome, you are logged in as {{ user.socialaccount_set.all.0.uid }} </p>
+            <p><a href="logout">Log Out</a></p>
+            <p>Authentication: {{ user.is_authenticated }}</p>
         {% else %}
             <a href="{% provider_login_url 'google' %}">Login with Google </a>
+            <p>Authentication: {{ user.is_authenticated }}</p>
         {% endif %}
     </body>
 </html>
