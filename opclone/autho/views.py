@@ -4,6 +4,8 @@ import requests
 from django.template import loader
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
+import json
+
 # Create your views here.
 from .forms import NameForm
 import urllib.parse
@@ -38,11 +40,26 @@ def get_summoner(request):
         my_region = my_region[1].split("=")
         my_region = my_region[1]
         #riot api form, gets data
+        #match list
         api_key = 'RGAPI-2df33002-8998-4de1-bbce-c62b60f8dc96'
         watcher = LolWatcher(api_key)
         me = watcher.summoner.by_name(my_region, name)
-        ranked_stats = watcher.league.by_summoner(my_region, me['id'])
-        return render(request, 'display.html', {'response': ranked_stats})
+        me = me['id']
+        ranked_stats = watcher.league.by_summoner(my_region, me)
+        name = ranked_stats[0]['summonerName']
+        rank, tier = ranked_stats[0]['rank'], ranked_stats[0]['tier'] 
+        rankTier =  tier +rank 
+        #
+       
+
+     
+
+
+        
+        #name = name[summonerName]
+
+ 
+        return render(request, 'display.html', {'response': ranked_stats, 'name': name, 'rank':rankTier})
         #if form.is_valid():
            # name = form.cleaned_data['your_name']
             #region = form.cleaned_data['your_region'] 
