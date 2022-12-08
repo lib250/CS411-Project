@@ -7,6 +7,8 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import json
 
+from .models import SearchHistory
+
 # Create your views here.
 import urllib.parse
 def index(request):
@@ -40,14 +42,39 @@ def get_summoner(request):
             messages.info(request, 'Summoner not found.')
             return redirect('test')
         
+        if request.user.is_authenticated:
+            entry_exists = SearchHistory.objects.filter(uid=request.user.username)
+            if not entry_exists:
+                new_history = SearchHistory.objects.create(uid=request.user.username, history=name+','+my_region)
+                new_history.save()
+            else:
+                history_entry = SearchHistory.objects.get(uid=request.user.username)
+                history = history_entry.history.split(';')
+                current_entry = name + ',' + my_region
+                
+                current_entry_idx = -1
+                for i in range(len(history)):
+                    if history[i] == current_entry:
+                        current_entry_idx = i
+                        
+                if current_entry_idx > -1:
+                    history[current_entry_idx], history[0] = history[0], history[current_entry_idx]
+                else:
+                    history = [current_entry] + history
+                    
+                if len(history) >= 6:
+                    history.pop()
+                
+                history_entry.history = ';'.join(history)
+                history_entry.save()
         
         #gets account id
         me = me_info['id']
         puuid = me_info['puuid']
         ranked_stats = watcher.league.by_summoner(my_region, me)
         #leagueID = ranked_stats[0]['id']
-        name = ranked_stats[0]['summonerName']
-        rank, tier = ranked_stats[0]['rank'], ranked_stats[0]['tier'] 
+        name = me_info['name']
+        rank, tier = (ranked_stats[0]['rank'], ranked_stats[0]['tier']) if ranked_stats else ("None", "None")
         rankTier =  tier + " " +rank 
         #gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
