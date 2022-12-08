@@ -51,7 +51,7 @@ def get_summoner(request):
         #leagueID = ranked_stats[0]['id']
         name = ranked_stats[0]['summonerName']
         rank, tier = ranked_stats[0]['rank'], ranked_stats[0]['tier'] 
-        rankTier =  tier +rank 
+        rankTier =  tier + " " + rank 
         #gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
         last_match = my_matches[0]

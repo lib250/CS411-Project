@@ -2,9 +2,10 @@
    <form action="data" method="post">
     {% csrf_token %}
     <div>{{form}}</div>
-    <h1>Raw: {{response}}</h1>
-    <h1>Name:{{name}} </h1>
-    <h1>Rank:{{rank}}</h1>
+    
+    <h1>Name: {{name}} </h1>
+    <h1>Rank: {{rank}}</h1>
+    <h1>Last Ten Games /W Performance:</h1>
     {%for i in matches %}
     <table>
       <tr>
@@ -44,11 +45,11 @@
       {%endfor%}
        </table>
        {%endfor%}
-    <h1>Characters: </h1>
-    <h1>Last Ten Games /W Performance:</h1>
-    <h1>{{player1}}</h1>
+    <h1>Champions: </h1>
     
-  <li></li>
+   
+    
+ 
   
     </form>
   
