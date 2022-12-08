@@ -16,8 +16,9 @@ def index(request):
 #RGAPI-41cbb789-b621-4522-acef-e5211ecfc836
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
-
-
+api_key = 'RGAPI-4d81e2ca-333c-412a-af76-c3fae7638134'
+        
+watcher = LolWatcher(api_key)
 def get_summoner(request):
     #checks valididy of form
     if request.method == 'POST':
@@ -41,8 +42,7 @@ def get_summoner(request):
         my_region = my_region[1]
         #riot api form, gets data
         #match list
-        api_key = 'RGAPI-cb37496a-27b4-40a3-b34b-faad97db50f4'
-        watcher = LolWatcher(api_key)
+       
         me_info = watcher.summoner.by_name(my_region, name)
         #gets account id
         me = me_info['id']
@@ -55,28 +55,30 @@ def get_summoner(request):
         #gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
         last_match = my_matches[0]
-
+        last_10_games = match_creator(my_matches, my_region)
         match_detail = watcher.match.by_id(my_region, last_match)
+        info = match_detail['info']
+        participants_info = info['participants']
+        #gets info from 1 game and puts it in a array of dictionaries
+        participants = []
+        for row in participants_info:
+            participants_row = {}
+            participants_row['summoner'] = row['summonerName']
+            participants_row['champion'] = row['championName']
+            participants_row['spell1'] = row['spell1Casts']
+            participants_row['spell2'] = row['spell2Casts']
+            participants_row['win'] = row['win']
+            participants_row['kills'] = row['kills']
+            participants_row['deaths'] = row['deaths']
+            participants_row['assists'] = row['assists']
+            participants_row['totalDamageDealt'] = row['totalDamageDealt']
+            participants_row['goldEarned'] = row['goldEarned']
+            participants_row['champLevel'] = row['champLevel']
+            participants_row['totalMinionsKilled'] = row['totalMinionsKilled']
+            participants_row['item0'] = row['item0']
+            participants_row['item1'] = row['item1']
+            participants.append(participants_row)
         
-        
-        #participants = []
-        #for row in match_detail['participants']:
-            #participants_row = {}
-            #participants_row['champion'] = row['championId']
-            #participants_row['spell1'] = row['spell1Id']
-            #participants_row['spell2'] = row['spell2Id']
-            #participants_row['win'] = row['stats']['win']
-            #participants_row['kills'] = row['stats']['kills']
-            #participants_row['deaths'] = row['stats']['deaths']
-            #participants_row['assists'] = row['stats']['assists']
-            #participants_row['totalDamageDealt'] = row['stats']['totalDamageDealt']
-            #participants_row['goldEarned'] = row['stats']['goldEarned']
-            #participants_row['champLevel'] = row['stats']['champLevel']
-            #participants_row['totalMinionsKilled'] = row['stats']['totalMinionsKilled']
-            #participants_row['item0'] = row['stats']['item0']
-            #participants_row['item1'] = row['stats']['item1']
-            #participants.append(participants_row)
-        #df = pd.DataFrame(participants)
         
         
 
@@ -85,11 +87,37 @@ def get_summoner(request):
         #name = name[summonerName]
 
  
-        return render(request, 'display.html', {'response': ranked_stats, 'name': name, 'rank':rankTier, 'matches' : match_detail})
+        return render(request, 'display.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'participants' : participants, 'matches' : last_10_games})
         #if form.is_valid():
            # name = form.cleaned_data['your_name']
             #region = form.cleaned_data['your_region'] 
     else:
         form = NameForm()
         return render(request, "data.html", {"form":form})
-
+#creates a list of the 10 matches played, which each match contains a dictinary of ach player
+def match_creator(list_matches, region):
+    ten_match_detail = []
+    for i in list_matches:
+        match_detail = watcher.match.by_id(region,i)
+        info = match_detail['info']
+        participants_info = info['participants']     
+        participants = []
+        for row in participants_info:
+            participants_row = {}
+            participants_row['summoner'] = row['summonerName']
+            participants_row['champion'] = row['championName']
+            participants_row['spell1'] = row['spell1Casts']
+            participants_row['spell2'] = row['spell2Casts']
+            participants_row['win'] = row['win']
+            participants_row['kills'] = row['kills']
+            participants_row['deaths'] = row['deaths']
+            participants_row['assists'] = row['assists']
+            participants_row['totalDamageDealt'] = row['totalDamageDealt']
+            participants_row['goldEarned'] = row['goldEarned']
+            participants_row['champLevel'] = row['champLevel']
+            participants_row['totalMinionsKilled'] = row['totalMinionsKilled']
+            participants_row['item0'] = row['item0']
+            participants_row['item1'] = row['item1']
+            participants.append(participants_row)
+        ten_match_detail.append(participants)
+    return ten_match_detail
