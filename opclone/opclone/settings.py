@@ -38,7 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'autho.apps.AuthoConfig',
+    
+    'social_django',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
+    
     
 ]
 
@@ -124,3 +132,35 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+## Authentication Data
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.spotify.SpotifyOAuth2'
+]
+
+# Google
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online'
+        }
+    }
+}
+
+SITE_ID = 3
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Spotify
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_SPOTIFY_KEY = '2a11c7e917694457b815e054a962720b'
+SOCIAL_AUTH_SPOTIFY_SECRET = 'a51f288d01b44fb0bbb648a6a5dc4025'
+SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read', 'playlist-modify-private']

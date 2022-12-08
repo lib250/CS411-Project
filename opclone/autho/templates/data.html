@@ -4,6 +4,16 @@
     }
 </style>
 
+{% if user.is_authenticated %}
+    <p> Welcome, logged in as {{ user.username }} </p>
+    <p><a href="logout">Log Out</a></p>
+{% else %}
+    <p> Log in to view recent searches: </p>
+    <a href="{% url "social:begin" "spotify" %}">Spotify</a> 
+{% endif %}
+
+<br><br>
+
 {% for message in messages %}
 <h5> {{ message }} </h5>
 {% endfor %}
