@@ -158,6 +158,6 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_SPOTIFY_KEY = '2a11c7e917694457b815e054a962720b'
 SOCIAL_AUTH_SPOTIFY_SECRET = 'a51f288d01b44fb0bbb648a6a5dc4025'
 
-SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read']
+SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read', 'playlist-modify-private']
 
 
