@@ -23,6 +23,8 @@ valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1',
         
 watcher = LolWatcher(api_key)
 def get_summoner(request):
+    
+    ### Get user search history if logged in
     user_search_history = []
     if request.user.is_authenticated:
         entry_exists = SearchHistory.objects.filter(uid=request.user.username)
@@ -30,15 +32,13 @@ def get_summoner(request):
             user_search_history = SearchHistory.objects.get(uid=request.user.username).history
             user_search_history = [i.split(',') for i in user_search_history.split(';')]
     
-    #checks valididy of form
     if request.method == 'POST':
     
-        #riot api form, gets data
-        #match list
-        
+        ### Get input info from user
         name = request.POST['summoner_name']
         my_region = request.POST['region']
         
+        ### Error checking
         if my_region not in valid_regions:
             messages.info(request, 'Please enter a valid region.')
             return redirect('test')
@@ -49,6 +49,7 @@ def get_summoner(request):
             messages.info(request, 'Summoner not found.')
             return redirect('test')
         
+        ### Updates database to reflect user's new search history
         if request.user.is_authenticated:
             entry_exists = SearchHistory.objects.filter(uid=request.user.username)
             if not entry_exists:
@@ -79,7 +80,6 @@ def get_summoner(request):
         me = me_info['id']
         puuid = me_info['puuid']
         ranked_stats = watcher.league.by_summoner(my_region, me)
-        #leagueID = ranked_stats[0]['id']
         name = me_info['name']
         rank, tier = (ranked_stats[0]['rank'], ranked_stats[0]['tier']) if ranked_stats else ("None", "None")
         rankTier =  tier + " " +rank 
