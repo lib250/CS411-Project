@@ -8,7 +8,6 @@ import pandas as pd
 import json
 
 # Create your views here.
-from .forms import NameForm
 import urllib.parse
 def index(request):
     template = loader.get_template('input.html')
@@ -24,6 +23,7 @@ watcher = LolWatcher(api_key)
 def get_summoner(request):
     #checks valididy of form
     if request.method == 'POST':
+    
         #riot api form, gets data
         #match list
         
@@ -33,6 +33,7 @@ def get_summoner(request):
         if my_region not in valid_regions:
             messages.info(request, 'Please enter a valid region.')
             return redirect('test')
+        
         try:
             me_info = watcher.summoner.by_name(my_region, name)
         except ApiError:

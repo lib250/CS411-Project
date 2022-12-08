@@ -142,19 +142,6 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.spotify.SpotifyOAuth2'
 ]
 
-# Google
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online'
-        }
-    }
-}
-
 SITE_ID = 3
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
