@@ -23,6 +23,13 @@ valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1',
         
 watcher = LolWatcher(api_key)
 def get_summoner(request):
+    user_search_history = []
+    if request.user.is_authenticated:
+        entry_exists = SearchHistory.objects.filter(uid=request.user.username)
+        if entry_exists:
+            user_search_history = SearchHistory.objects.get(uid=request.user.username).history
+            user_search_history = [i.split(',') for i in user_search_history.split(';')]
+    
     #checks valididy of form
     if request.method == 'POST':
     
@@ -81,10 +88,10 @@ def get_summoner(request):
         
         last_10_games = match_creator(my_matches, my_region)
        
-        return render(request, 'data.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches' : last_10_games})
+        return render(request, 'data.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches': last_10_games, 'history': user_search_history})
         
     else:
-        return render(request, "data.html")
+        return render(request, 'data.html', {'history': user_search_history})
 #creates a list of the 10 matches played, which each match contains a dictinary of ach player
 def match_creator(list_matches, region):
     ten_match_detail = []

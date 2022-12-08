@@ -6,6 +6,12 @@
 
 {% if user.is_authenticated %}
     <p> Welcome, logged in as {{ user.username }} </p>
+
+    {% for summoner, region in history %}
+        {{ summoner }} from {{ region }} <br>
+    {% endfor %}
+
+    <br>
     <p><a href="logout">Log Out</a></p>
 {% else %}
     <p> Log in to view recent searches: </p>
