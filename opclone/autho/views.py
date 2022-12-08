@@ -10,11 +10,7 @@ import json
 from .models import SearchHistory
 
 # Create your views here.
-import urllib.parse
-def index(request):
-    template = loader.get_template('input.html')
 
-    return  HttpResponse(template.render())
 #RGAPI-41cbb789-b621-4522-acef-e5211ecfc836
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
@@ -29,15 +25,17 @@ def get_summoner(request):
     if request.user.is_authenticated:
         entry_exists = SearchHistory.objects.filter(uid=request.user.username)
         if entry_exists:
-            user_search_history = SearchHistory.objects.get(uid=request.user.username).history.split(';')
+            user_search_history = SearchHistory.objects.get(uid=request.user.username).history
+            user_search_history = [' from '.join(entry.split(',')) for entry in user_search_history.split(';')]
     
     if request.method == 'POST':
         
         ### Get input info from user
         if 'preset' in request.POST:
-            print(len(request.POST['preset']))
-            name, my_region = request.POST['preset'].split(',')
+            # If button was pressed
+            name, my_region = request.POST['preset'].split(' from ')
         else:
+            # Search field was used
             name = request.POST['summoner_name']
             my_region = request.POST['region']
         
@@ -51,38 +49,7 @@ def get_summoner(request):
         except ApiError:
             messages.info(request, 'Summoner not found.')
             return redirect('test')
-        
-        ### Updates database to reflect user's new search history
-        if request.user.is_authenticated:
-            entry_exists = SearchHistory.objects.filter(uid=request.user.username)
-            if not entry_exists:
-                new_history = SearchHistory.objects.create(uid=request.user.username, history=name+','+my_region)
-                new_history.save()
-            else:
-                history_entry = SearchHistory.objects.get(uid=request.user.username)
-                history = history_entry.history.split(';')
-                current_entry = name + ',' + my_region
-                
-                current_entry_idx = -1
-                for i in range(len(history)):
-                    if history[i] == current_entry:
-                        current_entry_idx = i
-                        
-                if current_entry_idx > -1:
-                    temp = history[current_entry_idx]
-                    while current_entry_idx > 0:
-                        history[current_entry_idx] = history[current_entry_idx - 1]
-                        current_entry_idx -= 1
-                    history[0] = temp
-                else:
-                    history = [current_entry] + history
-                    
-                if len(history) >= 6:
-                    history.pop()
-                
-                history_entry.history = ';'.join(history)
-                history_entry.save()
-        
+            
         #gets account id
         me = me_info['id']
         puuid = me_info['puuid']
@@ -94,6 +61,43 @@ def get_summoner(request):
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
         
         last_10_games = match_creator(my_matches, my_region)
+        
+        ### Updates database to reflect user's new search history
+        if request.user.is_authenticated:
+            entry_exists = SearchHistory.objects.filter(uid=request.user.username)
+            if not entry_exists:
+                ## Create new database entry if first time user
+                new_history = SearchHistory.objects.create(uid=request.user.username, history=name+','+my_region)
+                new_history.save()
+            else:
+                history_entry = SearchHistory.objects.get(uid=request.user.username)
+                history = history_entry.history.split(';')
+                current_entry = name + ',' + my_region
+                
+                # See whether current entry is already in history
+                current_entry_idx = -1
+                for i in range(len(history)):
+                    if history[i] == current_entry:
+                        current_entry_idx = i
+                        
+                if current_entry_idx > -1:
+                    # If current entry is found, move it up to the front,
+                    # shifting elements back as needed
+                    temp = history[current_entry_idx]
+                    while current_entry_idx > 0:
+                        history[current_entry_idx] = history[current_entry_idx - 1]
+                        current_entry_idx -= 1
+                    history[0] = temp
+                else:
+                    # If current entry is not found, add it to the front
+                    history = [current_entry] + history
+                    
+                ## Limit database size to 5 entries
+                if len(history) >= 6:
+                    history.pop()
+                
+                history_entry.history = ';'.join(history)
+                history_entry.save()
        
         return render(request, 'data.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches': last_10_games, 'history': user_search_history})
         
