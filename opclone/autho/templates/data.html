@@ -7,15 +7,20 @@
 {% if user.is_authenticated %}
     <p> Welcome, logged in as {{ user.username }} </p>
 
-    {% for summoner, region in history %}
-        {{ summoner }} from {{ region }} <br>
+    {% for entry in history %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <button name="preset" type="submit" value="{{ entry }}">
+                {{ entry }}
+            </button>
+        </form>
     {% endfor %}
 
     <br>
     <p><a href="logout">Log Out</a></p>
 {% else %}
     <p> Log in to view recent searches: </p>
-    <a href="{% url "social:begin" "spotify" %}">Spotify</a> 
+    <a href="{% url "social:begin" "spotify" %}">Login with Spotify</a> 
 {% endif %}
 
 <br><br>
@@ -24,7 +29,7 @@
 <h5> {{ message }} </h5>
 {% endfor %}
 
-<form action="" method = "POST">
+<form action="" method="POST">
     {% csrf_token %}
     <b>Summoner Name: </b> <br>
     <input type="text" name="summoner_name"/> <br>

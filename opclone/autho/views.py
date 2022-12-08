@@ -29,14 +29,17 @@ def get_summoner(request):
     if request.user.is_authenticated:
         entry_exists = SearchHistory.objects.filter(uid=request.user.username)
         if entry_exists:
-            user_search_history = SearchHistory.objects.get(uid=request.user.username).history
-            user_search_history = [i.split(',') for i in user_search_history.split(';')]
+            user_search_history = SearchHistory.objects.get(uid=request.user.username).history.split(';')
     
     if request.method == 'POST':
-    
+        
         ### Get input info from user
-        name = request.POST['summoner_name']
-        my_region = request.POST['region']
+        if 'preset' in request.POST:
+            print(len(request.POST['preset']))
+            name, my_region = request.POST['preset'].split(',')
+        else:
+            name = request.POST['summoner_name']
+            my_region = request.POST['region']
         
         ### Error checking
         if my_region not in valid_regions:
@@ -66,7 +69,11 @@ def get_summoner(request):
                         current_entry_idx = i
                         
                 if current_entry_idx > -1:
-                    history[current_entry_idx], history[0] = history[0], history[current_entry_idx]
+                    temp = history[current_entry_idx]
+                    while current_entry_idx > 0:
+                        history[current_entry_idx] = history[current_entry_idx - 1]
+                        current_entry_idx -= 1
+                    history[0] = temp
                 else:
                     history = [current_entry] + history
                     
