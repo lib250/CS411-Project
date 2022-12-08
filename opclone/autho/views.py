@@ -51,46 +51,14 @@ def get_summoner(request):
         #leagueID = ranked_stats[0]['id']
         name = ranked_stats[0]['summonerName']
         rank, tier = ranked_stats[0]['rank'], ranked_stats[0]['tier'] 
-        rankTier =  tier + " " + rank 
+        rankTier =  tier + " " +rank 
         #gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
-        last_match = my_matches[0]
+        
         last_10_games = match_creator(my_matches, my_region)
-        match_detail = watcher.match.by_id(my_region, last_match)
-        info = match_detail['info']
-        participants_info = info['participants']
-        #gets info from 1 game and puts it in a array of dictionaries
-        participants = []
-        for row in participants_info:
-            participants_row = {}
-            participants_row['summoner'] = row['summonerName']
-            participants_row['champion'] = row['championName']
-            participants_row['spell1'] = row['spell1Casts']
-            participants_row['spell2'] = row['spell2Casts']
-            participants_row['win'] = row['win']
-            participants_row['kills'] = row['kills']
-            participants_row['deaths'] = row['deaths']
-            participants_row['assists'] = row['assists']
-            participants_row['totalDamageDealt'] = row['totalDamageDealt']
-            participants_row['goldEarned'] = row['goldEarned']
-            participants_row['champLevel'] = row['champLevel']
-            participants_row['totalMinionsKilled'] = row['totalMinionsKilled']
-            participants_row['item0'] = row['item0']
-            participants_row['item1'] = row['item1']
-            participants.append(participants_row)
+       
+        return render(request, 'display.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches' : last_10_games})
         
-        
-        
-
-
-        
-        #name = name[summonerName]
-
- 
-        return render(request, 'display.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'participants' : participants, 'matches' : last_10_games})
-        #if form.is_valid():
-           # name = form.cleaned_data['your_name']
-            #region = form.cleaned_data['your_region'] 
     else:
         form = NameForm()
         return render(request, "data.html", {"form":form})
