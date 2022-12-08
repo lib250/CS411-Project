@@ -2,14 +2,14 @@
 {% load socialaccount %}
 <html>
     <body>
-        <h1> Google OAuth </h1>
+        <h1> OAuth </h1>
         {% if user.is_authenticated %}
-            <p> Welcome, you are logged in as {{ user.socialaccount_set.all.0.uid }} </p>
+            <p> Welcome, you are logged in as {{ user.username }} </p>
             <p><a href="logout">Log Out</a></p>
-            <p>Authentication: {{ user.is_authenticated }}</p>
         {% else %}
-            <a href="{% provider_login_url 'google' %}">Login with Google </a>
-            <p>Authentication: {{ user.is_authenticated }}</p>
+            <a href="{% provider_login_url 'google' %}">Login with Google </a><br>
+            <a href="{% url "social:begin" "spotify" %}">Login with Spotify</a>
         {% endif %}
+        <p>Authentication: {{ user.is_authenticated }}</p>
     </body>
 </html>

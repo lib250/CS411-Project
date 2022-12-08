@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -130,7 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # OAuth
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.spotify.SpotifyOAuth2'
 ]
 
 
@@ -150,5 +152,12 @@ SITE_ID = 3
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_SPOTIFY_KEY = '2a11c7e917694457b815e054a962720b'
+SOCIAL_AUTH_SPOTIFY_SECRET = 'a51f288d01b44fb0bbb648a6a5dc4025'
+
+SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read']
 
 
