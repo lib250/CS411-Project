@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import  HttpResponse, HttpResponseRedirect
 import requests 
 from django.template import loader
+from django.contrib import messages
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import json
@@ -17,33 +18,28 @@ def index(request):
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
 api_key = 'RGAPI-4d81e2ca-333c-412a-af76-c3fae7638134'
+valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1', 'ru', 'br1'}
         
 watcher = LolWatcher(api_key)
 def get_summoner(request):
     #checks valididy of form
     if request.method == 'POST':
-        form = NameForm(request.POST)
-        if form.is_valid():
-            params = {
-                "your_name" : form.cleaned_data['name'],
-                "your_region" : form.cleaned_data['region']
-            }
-        q_string = urllib.parse.urlencode(params)
-        
-       
-        nameregiondict = q_string
-        #gets name from qstring
-        name = nameregiondict.split("&")
-        name = name[0].split("=")
-        name = name[1] 
-        #gets region from qstring
-        my_region = nameregiondict.split("&")
-        my_region = my_region[1].split("=")
-        my_region = my_region[1]
         #riot api form, gets data
         #match list
-       
-        me_info = watcher.summoner.by_name(my_region, name)
+        
+        name = request.POST['summoner_name']
+        my_region = request.POST['region']
+        
+        if my_region not in valid_regions:
+            messages.info(request, 'Please enter a valid region.')
+            return redirect('test')
+        try:
+            me_info = watcher.summoner.by_name(my_region, name)
+        except ApiError:
+            messages.info(request, 'Summoner not found.')
+            return redirect('test')
+        
+        
         #gets account id
         me = me_info['id']
         puuid = me_info['puuid']
@@ -57,11 +53,10 @@ def get_summoner(request):
         
         last_10_games = match_creator(my_matches, my_region)
        
-        return render(request, 'display.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches' : last_10_games})
+        return render(request, 'data.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches' : last_10_games})
         
     else:
-        form = NameForm()
-        return render(request, "data.html", {"form":form})
+        return render(request, "data.html")
 #creates a list of the 10 matches played, which each match contains a dictinary of ach player
 def match_creator(list_matches, region):
     ten_match_detail = []
