@@ -130,3 +130,7 @@ def match_creator(list_matches, region):
             participants.append(participants_row)
         ten_match_detail.append(participants)
     return ten_match_detail
+
+    #HTML/CSS
+    def style(request):
+       return render(request,'style.css')
