@@ -1,0 +1,168 @@
+ * {
+	margin:0;
+	/*padding-top:200px;*/
+	/*padding-bottom: 200px;*/
+	font-family: sans-serif;
+	background-image: url("background.jpg");
+	background-size: cover;
+	color: #000000;
+	font-size: bold;
+	padding: 0;
+	background-repeat: no-repeat;
+	
+}
+
+/* body */
+body {
+	text-align: center;
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+}
+
+/* h1 */
+h1 {
+	color: #000000;
+	text-align: center;
+	font-size: 300%;
+	font-weight: bold;
+	line-height: 200%;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-family:"Open Sans", sans-serif;
+}
+
+/* h2 */
+
+h2 {
+	color: #000000;
+	clear: both;
+	font-size: 125%;
+	line-height: 120%;
+	font-weight: bold;
+	background-image: none;
+	
+}
+
+/* h3 */
+
+h3 {
+    color: #000000;
+	clear: both;
+	font-size: 125%;
+	line-height: 120%;
+	font-weight: bold;
+	background-image: none;
+}
+
+/* h4 */
+
+h4 {
+	color: #000000;
+	clear: both;
+	font-size: 125%;
+	line-height: 120%;
+	font-weight: bold;
+	background-image: none;
+}
+form{
+	background-image: none;
+}
+/* p */
+
+p {
+	color: #000000;
+	text-decoration: none;
+	font-size: 150%;
+	font-weight: bold;
+	background-image: none;
+}
+
+
+
+/* a */
+
+a {
+	color: rgb(0, 0, 0);
+	font-weight: bold;
+	text-decoration: none;
+	transition: all .7s ease;
+	background-attachment: fixed;
+	background-image: none;
+	
+	
+}
+
+a:hover {
+	color: rgb(51, 255, 0);
+	background-color: transparent;
+	text-decoration: none;
+	padding-left: 2px;
+}
+
+b {
+	color: rgb(0, 0, 0);
+	font-weight: bold;
+	text-decoration: none;
+	transition: all .7s ease;
+	background-image: none;
+
+	
+}
+
+button {
+	color: rgb(0, 0, 0);
+	font-weight: bold;
+	text-decoration: none;
+	transition: all .7s ease;
+	background-image: none;
+}
+
+button:hover {
+	color: rgb(0, 255, 98);
+	background-color: transparent;
+	text-decoration: none;
+	padding-left: 2px;
+	background-image: none;
+}
+/* tr, th, td */
+
+#labels th {
+    background-color: rgb(0, 0, 0);
+	background-image: none;
+	
+}
+
+#playerinfo {
+    background-color: rgb(0, 0, 0);
+	background-image: none;
+}
+
+#summonername {
+    background-color: rgb(0, 0, 0);
+    font-weight: bold;
+	background-image: none;
+}
+
+#championname {
+    background-color: rgb(0, 0, 0);
+	background-image: none;
+}
+
+/* footer */
+
+#bottomright {
+	position: absolute;
+	bottom: 5px;
+	right: 14px;
+	transition: all .7s ease;
+	color: rgb(0, 0, 0);
+}
+
+#bottomright:hover {
+	color: rgb(0, 0, 0);
+	background-color: transparent;
+	text-decoration: none;	
+	transition-duration: .7s;
+	background-image: none;
+}
+

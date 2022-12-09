@@ -1,9 +1,3 @@
-<!-- <style>
-    h5 {
-        color: red;
-    }
-</style> -->
-
 <div id="header">
     <head>
         <meta charset="utf-8">
@@ -14,13 +8,17 @@
         <link rel="preconnect" href="https://fonts.googleapis.com"> 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+        {%load static%}
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        
     </head>
+    
 </div> <!-- end of header div-->
 
+
 <div id="body">
-
-    <h1>League of Legends Tracker</h1>
-
+    <h1>League of Legends Tracker </h1>
+  
     {% if user.is_authenticated %}
         <p> Welcome, logged in as {{ user.username }} </p>
 
@@ -101,6 +99,7 @@
         </table>
         {%endfor%}
     {% endif %}
+    
 </div> <!-- end of body div-->
 
 <div>
@@ -108,3 +107,9 @@
         <p id="bottomright" title="to the repo"><a href="https://github.com/lib250/CS411-Project" target="_blank" class="active">gg</a></p>
     </footer>
 </div> <!--end of footer div-->
+
+<!-- <style>
+    h5 {
+        color: red;
+    }
+</style> -->
