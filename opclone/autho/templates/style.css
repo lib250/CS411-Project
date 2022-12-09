@@ -1,0 +1,112 @@
+* {
+	background-color: #f6f6f6;
+	color: #979797;
+	padding: 0;
+}
+
+/* body */
+
+body {
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+}
+
+/* h1 */
+
+h1 {
+	color: #2a2a2a;
+	font-size: 130%;
+	font-weight: normal;
+	line-height: 130%;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+/* h2 */
+
+h2 {
+	color: #2a2a2a;
+	clear: both;
+	font-size: 120%;
+	font-weight: normal;
+	line-height: 120%;
+}
+
+/* h3 */
+
+h3 {
+    color: #404040;
+	clear: both;
+	font-size: 110%;
+	font-weight: normal;
+	line-height: 120%;
+}
+
+/* h4 */
+
+h4 {
+	color: #404040;
+	clear: both;
+	font-size: 110%;
+	font-weight: normal;
+	line-height: 120%;
+}
+
+/* p */
+
+p {
+	color: #1a1a1a;
+	background-color: transparent;
+	text-decoration: none;
+}
+
+/* a */
+
+a {
+	color: rgb(82, 122, 139);
+	background-color: transparent;
+	text-decoration: none;
+	transition: all .7s ease;
+}
+
+a:hover {
+	color: rgb(120, 165, 184);
+	background-color: transparent;
+	text-decoration: none;
+	padding-left: 2px;
+}
+
+/* tr, th, td */
+
+#labels th {
+    background-color: rgb(209, 220, 225);
+}
+
+#playerinfo {
+    background-color: white;
+}
+
+#summonername {
+    background-color: rgb(200, 232, 231);
+    font-weight: bold;
+}
+
+#championname {
+    background-color: rgb(209, 227, 240);
+}
+
+/* footer */
+
+#bottomright {
+	position: absolute;
+	bottom: 0px;
+	right: 14px;
+	transition: all .7s ease;
+}
+
+#bottomright:hover {
+	color: rgb(120, 165, 184);
+	background-color: transparent;
+	text-decoration: none;	
+	transition-duration: .7s;
+}
