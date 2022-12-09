@@ -35,7 +35,7 @@
         <p><a href="logout">Log Out</a></p>
     {% else %}
         <p> Log in to view recent searches: </p>
-        <a href="{% url "social:begin" "spotify" %}">Login with Spotify</a> 
+        <p id="a_spotify"><a href="{% url "social:begin" "spotify" %}">Login with Spotify</a></p>
     {% endif %}
 
     <br><br>
@@ -44,7 +44,7 @@
     <h5> {{ message }} </h5>
     {% endfor %}
 
-    <form action="" method="POST">
+    <form id="login_form" action="" method="POST">
         {% csrf_token %}
         <b>Summoner Name: </b> <br>
         <input type="text" name="summoner_name"/> <br>
@@ -54,7 +54,7 @@
     </form>
 
     {% if name %}
-    <h2>Name: {{name}} </h2>
+    <h2>Summoner Name: {{name}} </h2>
         <h4>Rank: {{rank}}</h4>
         <h4>Champions: </h4>
         
