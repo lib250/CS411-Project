@@ -1,0 +1,151 @@
+* {
+	background-color: #f6f6f6;
+	color: #2a2a2a;
+	padding: 0;
+}
+
+/* body */
+
+body {
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+}
+
+/* h1 */
+
+h1 {
+	color: #2a2a2a;
+	font-size: 170%;
+	font-weight: normal;
+	line-height: 170%;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	text-align: center;
+}
+
+/* h2 */
+
+h2 {
+	color: #2a2a2a;
+	clear: both;
+	font-size: 120%;
+	font-weight: normal;
+	line-height: 120%;
+	text-align: center;
+}
+
+/* h3 */
+
+h3 {
+	color: #2a2a2a;
+	clear: both;
+	font-size: 110%;
+	font-weight: normal;
+	line-height: 120%;
+	text-align: center;
+}
+
+/* h4 */
+
+h4 {
+	color: #2a2a2a;
+	clear: both;
+	font-size: 110%;
+	font-weight: normal;
+	line-height: 120%;
+	text-align: center;
+}
+
+/* p */
+
+p {
+	color: #1a1a1a;
+	background-color: transparent;
+	text-decoration: none;
+	text-align: center;
+}
+
+/* a */
+
+a {
+	color: rgb(75, 120, 130);
+	background-color: transparent;
+	text-decoration: none;
+	transition: all .7s ease;
+	text-align: center;
+}
+
+a:hover {
+	color: rgb(120, 165, 184);
+	background-color: transparent;
+	text-decoration: none;
+	padding-left: 2px;
+}
+
+#a_spotify {
+	text-align: center;
+}
+
+/* b */
+
+b {
+	text-align: center;
+}
+
+#login_form {
+	text-align: center;
+}
+
+/* tr, th, td */
+
+#labels th {
+    background-color: rgb(209, 220, 225);
+	color: #2a2a2a;
+	padding-right: 2px;
+}
+
+#playerinfo {
+    background-color: white;
+	color: #2a2a2a;
+}
+
+#summonername {
+    background-color: rgb(200, 232, 231);
+	color: #2a2a2a;
+    font-weight: bold;
+}
+
+#championname {
+    background-color: rgb(209, 227, 240);
+	color: #2a2a2a;
+}
+
+/* button */
+
+button {
+	width: 130px;
+	overflow: hidden;
+	background-color: rgb(200, 205, 207);
+	color: #2a2a2a;
+	border: inherit;
+	outline: none;
+	letter-spacing: 0px;
+	text-decoration: none;
+}
+
+/* footer */
+
+#bottomright {
+	position: relative;
+	text-align: right;
+	bottom: 0px;
+	right: 14px;
+	transition: all .7s ease;
+}
+
+#bottomright:hover {
+	color: rgb(120, 165, 184);
+	background-color: transparent;
+	text-decoration: none;	
+	transition-duration: .7s;
+}

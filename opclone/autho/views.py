@@ -41,7 +41,7 @@ def get_summoner(request):
         
         ### Error checking
         if my_region not in valid_regions:
-            messages.info(request, 'Please enter a valid region.')
+            messages.info(request, 'Please enter a valid region. Valid regions include eun1, euw1, jp1, kr, la1, la2, na1, oc1, tr1, ru, and br1.')
             return redirect('test')
         
         try:
@@ -130,3 +130,7 @@ def match_creator(list_matches, region):
             participants.append(participants_row)
         ten_match_detail.append(participants)
     return ten_match_detail
+
+    #HTML/CSS
+    def style(request):
+       return render(request,'style.css')
