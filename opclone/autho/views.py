@@ -62,20 +62,28 @@ def get_summoner(request):
         # Gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
         
-        last_10_games = match_creator(my_matches, my_region)
+        last_10_games, streak_win, streak_len = match_creator(name, my_matches, my_region)
         
         ### Updates database to reflect user's new search history
         if request.user.is_authenticated:
             update_database(request.user.username, name, my_region)
        
-        return render(request, 'data.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches': last_10_games, 'history': user_search_history})
+        return render(request, 'data.html', {'history': user_search_history, 'response': ranked_stats, 
+                                             'name': name, 'rank': rankTier, 'matches': last_10_games,
+                                             's_win': streak_win, 's_len': streak_len})
         
     else:
         return render(request, 'data.html', {'history': user_search_history})
     
 ### Creates a list of the 10 matches played; each match contains a dictionary of each player
-def match_creator(list_matches, region):
+def match_creator(curr_summoner, list_matches, region):
     ten_match_detail = []
+    
+    latest_game = True
+    streak_going = True
+    streak_win = False
+    streak_len = 0
+    
     for i in list_matches:
         match_detail = watcher.match.by_id(region,i)
         info = match_detail['info']
@@ -98,8 +106,19 @@ def match_creator(list_matches, region):
             participants_row['item0'] = row['item0']
             participants_row['item1'] = row['item1']
             participants.append(participants_row)
+            
+            # Find current streak
+            if row['summonerName'] == curr_summoner and streak_going:
+                if latest_game:
+                    streak_win = row['win']
+                    latest_game = False
+                if streak_win == row['win']:
+                    streak_len += 1
+                else:
+                    streak_going = False
+    
         ten_match_detail.append(participants)
-    return ten_match_detail
+    return ten_match_detail, streak_win, streak_len
 
     #HTML/CSS
     def style(request):
