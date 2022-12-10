@@ -28,6 +28,7 @@ def get_summoner(request):
             user_search_history = SearchHistory.objects.get(uid=request.user.username).history
             user_search_history = [' from '.join(entry.split(',')) for entry in user_search_history.split(';')]
     
+    ### If the user has searched for a summoner
     if request.method == 'POST':
         
         ### Get input info from user
@@ -50,14 +51,15 @@ def get_summoner(request):
             messages.info(request, 'Summoner not found.')
             return redirect('test')
             
-        #gets account id
+        # Gets player information
         me = me_info['id']
         puuid = me_info['puuid']
         ranked_stats = watcher.league.by_summoner(my_region, me)
         name = me_info['name']
         rank, tier = (ranked_stats[0]['rank'], ranked_stats[0]['tier']) if ranked_stats else ("None", "None")
         rankTier =  tier + " " +rank 
-        #gets matches using puuid
+        
+        # Gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
         
         last_10_games = match_creator(my_matches, my_region)
@@ -70,7 +72,8 @@ def get_summoner(request):
         
     else:
         return render(request, 'data.html', {'history': user_search_history})
-#creates a list of the 10 matches played, which each match contains a dictinary of ach player
+    
+### Creates a list of the 10 matches played; each match contains a dictionary of each player
 def match_creator(list_matches, region):
     ten_match_detail = []
     for i in list_matches:
@@ -117,7 +120,7 @@ def update_database(username, summoner_name, region):
     history_entry = SearchHistory.objects.get(uid=username)
     history = history_entry.history.split(';')
     
-    # See whether current entry is already in history
+    # Get index of current entry in history; -1 if not present
     current_entry_idx = -1
     for i in range(len(history)):
         if history[i] == current_entry:
