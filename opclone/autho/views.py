@@ -14,7 +14,7 @@ from .models import SearchHistory
 #RGAPI-41cbb789-b621-4522-acef-e5211ecfc836
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
-api_key = 'RGAPI-61dd85df-7113-4959-bd55-c1a8b574be11'
+api_key = 'RGAPI-f9639075-3605-4a57-97d8-ecfdc70b0354'
 valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1', 'ru', 'br1'}
         
 watcher = LolWatcher(api_key)
@@ -64,40 +64,7 @@ def get_summoner(request):
         
         ### Updates database to reflect user's new search history
         if request.user.is_authenticated:
-            entry_exists = SearchHistory.objects.filter(uid=request.user.username)
-            if not entry_exists:
-                ## Create new database entry if first time user
-                new_history = SearchHistory.objects.create(uid=request.user.username, history=name+','+my_region)
-                new_history.save()
-            else:
-                history_entry = SearchHistory.objects.get(uid=request.user.username)
-                history = history_entry.history.split(';')
-                current_entry = name + ',' + my_region
-                
-                # See whether current entry is already in history
-                current_entry_idx = -1
-                for i in range(len(history)):
-                    if history[i] == current_entry:
-                        current_entry_idx = i
-                        
-                if current_entry_idx > -1:
-                    # If current entry is found, move it up to the front,
-                    # shifting elements back as needed
-                    temp = history[current_entry_idx]
-                    while current_entry_idx > 0:
-                        history[current_entry_idx] = history[current_entry_idx - 1]
-                        current_entry_idx -= 1
-                    history[0] = temp
-                else:
-                    # If current entry is not found, add it to the front
-                    history = [current_entry] + history
-                    
-                ## Limit database size to 5 entries
-                if len(history) >= 6:
-                    history.pop()
-                
-                history_entry.history = ';'.join(history)
-                history_entry.save()
+            update_database(request.user.username, name, my_region)
        
         return render(request, 'data.html', {'response': ranked_stats, 'name': name, 'rank': rankTier, 'matches': last_10_games, 'history': user_search_history})
         
@@ -134,3 +101,43 @@ def match_creator(list_matches, region):
     #HTML/CSS
     def style(request):
        return render(request,'style.css')
+   
+   
+### Updates database to reflect user's new search history
+def update_database(username, summoner_name, region):
+    entry_exists = SearchHistory.objects.filter(uid=username)
+    current_entry = summoner_name + ',' + region
+    
+    if not entry_exists:
+        ## Create new database entry if first time user
+        new_history = SearchHistory.objects.create(uid=username, history=current_entry)
+        new_history.save()
+        return
+    
+    history_entry = SearchHistory.objects.get(uid=username)
+    history = history_entry.history.split(';')
+    
+    # See whether current entry is already in history
+    current_entry_idx = -1
+    for i in range(len(history)):
+        if history[i] == current_entry:
+            current_entry_idx = i
+            
+    if current_entry_idx > -1:
+        # If current entry is found, move it up to the front,
+        # shifting elements back as needed
+        temp = history[current_entry_idx]
+        while current_entry_idx > 0:
+            history[current_entry_idx] = history[current_entry_idx - 1]
+            current_entry_idx -= 1
+        history[0] = temp
+    else:
+        # If current entry is not found, add it to the front
+        history = [current_entry] + history
+        
+    ## Limit database size to 5 entries
+    if len(history) >= 6:
+        history.pop()
+    
+    history_entry.history = ';'.join(history)
+    history_entry.save()
