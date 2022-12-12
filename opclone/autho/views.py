@@ -14,7 +14,7 @@ from .models import SearchHistory
 #RGAPI-41cbb789-b621-4522-acef-e5211ecfc836
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
-api_key = 'RGAPI-f9639075-3605-4a57-97d8-ecfdc70b0354'
+api_key = 'RGAPI-f0d7899d-b773-4378-a238-bbbe5ecf5375'
 valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1', 'ru', 'br1'}
         
 watcher = LolWatcher(api_key)
