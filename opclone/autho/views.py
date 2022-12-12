@@ -61,7 +61,8 @@ def get_summoner(request):
         
         # Gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
-        
+       
+
         last_10_games, streak_win, streak_len = match_creator(name, my_matches, my_region)
         
         ### Updates database to reflect user's new search history
@@ -77,7 +78,7 @@ def get_summoner(request):
     
 ### Creates a list of the 10 matches played; each match contains a dictionary of each player
 def match_creator(curr_summoner, list_matches, region):
-    ten_match_detail = []
+    ten_match_detail = {}
     
     latest_game = True
     streak_going = True
@@ -88,6 +89,10 @@ def match_creator(curr_summoner, list_matches, region):
         match_detail = watcher.match.by_id(region,i)
         info = match_detail['info']
         participants_info = info['participants']     
+        game_info = []
+        gameType = info['gameMode']
+        gameTime = info['gameDuration'] // 60
+        game_info = [gameType, gameTime]
         participants = []
         for row in participants_info:
             participants_row = {}
@@ -105,6 +110,8 @@ def match_creator(curr_summoner, list_matches, region):
             participants_row['totalMinionsKilled'] = row['totalMinionsKilled']
             participants_row['item0'] = row['item0']
             participants_row['item1'] = row['item1']
+           
+
             participants.append(participants_row)
             
             # Find current streak
@@ -116,15 +123,23 @@ def match_creator(curr_summoner, list_matches, region):
                     streak_len += 1
                 else:
                     streak_going = False
-    
-        ten_match_detail.append(participants)
+        if 'gameInfo' not in ten_match_detail:
+            ten_match_detail['gameInfo'] = [game_info]
+        else:
+            ten_match_detail['gameInfo'].append(game_info)
+        if 'part' not in ten_match_detail:
+            ten_match_detail['part'] = [participants]
+        else:
+            ten_match_detail['part'].append(participants)
+       
+
+             
     return ten_match_detail, streak_win, streak_len
 
     #HTML/CSS
     def style(request):
        return render(request,'style.css')
-   
-   
+
 ### Updates database to reflect user's new search history
 def update_database(username, summoner_name, region):
     entry_exists = SearchHistory.objects.filter(uid=username)

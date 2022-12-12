@@ -59,7 +59,8 @@
         <h4>Champions: </h4>
         
         <h3>Last Ten Games /W Performance:</h3>
-        {%for i in matches %}
+        {%for i in matches.part %}
+        {%for j in matches.gameInfo%}
         <table>
         <tr id="labels">
             <th>Summoner</th>
@@ -76,6 +77,10 @@
             <th>Total Minions Killed</th>
             <th>Item 1</th>
             <th>Item 2</th>
+           
+            <th>GameMode : {{j.0}} </th>
+            <th>Duration : {{j.1}}  Minutes</th>
+           
         </tr>
         <tr id="playerinfo">
             {% for player in i %}
@@ -93,10 +98,15 @@
             <td>{{ player.totalMinionsKilled }}</td>
             <td>{{ player.item0 }}</td>
             <td>{{ player.item1 }}</td> 
+
+           
             
         </tr>
         {%endfor%}
+        
         </table>
+       
+        {%endfor%}
         {%endfor%}
     {% endif %}
     
