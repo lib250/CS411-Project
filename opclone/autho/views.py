@@ -170,9 +170,6 @@ def generate_playlist(streak_len):
  
     
 
-
-   
-
   # Create a new playlist on the user's account
   #playlist = sp.user_playlist_create(user="USERNAME", name=playlist_name, public=True)
   #playlist_id = playlist["id"]
