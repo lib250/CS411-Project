@@ -72,7 +72,7 @@ def get_summoner(request):
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
 
         last_10_games, streak_win, streak_len = match_creator(name, my_matches, my_region)
-        print('YERRRR', len(last_10_games))
+        print('YERRRR', type(last_10_games))
         
         playlist = generate_playlist(streak_win)
         
@@ -82,7 +82,8 @@ def get_summoner(request):
        
         return render(request, 'data.html', {'history': user_search_history, 'response': ranked_stats, 
                                              'name': name, 'rank': rankTier, 'matches': last_10_games,
-                                             's_win': streak_win, 's_len': streak_len, 'playlist': playlist})
+                                             's_win': streak_win, 's_len': streak_len, 'playlist': playlist,
+                                             'part_game':zip(last_10_games['part'], last_10_games['gameInfo'])})
         
     else:
         return render(request, 'data.html', {'history': user_search_history})

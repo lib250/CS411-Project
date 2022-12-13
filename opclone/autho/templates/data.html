@@ -72,10 +72,11 @@
         {% endfor %}
         <hr>
         <h3>Last Ten Games /W Performance:</h3>
-        {%for i in matches.part %}
-        {%for j in matches.gameInfo%}
-        <table>
-        <tr id="labels">
+
+        {%for i, j in part_game %}
+            
+            <table>
+            <tr id="labels">
             <th>Summoner</th>
             <th>Champion</th>
             <th>Spell1</th>
@@ -95,9 +96,10 @@
             <th>Duration : {{j.1}}  Minutes</th>
            
         </tr>
+        {% for player in i %}
         <tr id="playerinfo">
-            {% for player in i %}
-            <td id="summonername">{{ player.summoner }} </td>
+            
+            <td id="summonername">{{ player.summoner }}</td>
             <td id="championname">{{ player.champion }}</td>
             <td>{{player.spell1 }}</td>
             <td>{{ player.spell2 }}</td>
@@ -119,7 +121,6 @@
         
         </table>
        
-        {%endfor%}
         {%endfor%}
     {% endif %}
     
