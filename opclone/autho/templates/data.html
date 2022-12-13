@@ -35,7 +35,7 @@
         <p><a href="logout">Log Out</a></p>
     {% else %}
         <p> Log in to view recent searches: </p>
-        <a href="{% url "social:begin" "spotify" %}">Login with Spotify</a> 
+        <p id="a_spotify"><a href="{% url "social:begin" "spotify" %}">Login with Spotify</a></p>
     {% endif %}
 
     <br><br>
@@ -44,7 +44,7 @@
     <h5> {{ message }} </h5>
     {% endfor %}
 
-    <form action="" method="POST">
+    <form id="login_form" action="" method="POST">
         {% csrf_token %}
         <b>Summoner Name: </b> <br>
         <input type="text" name="summoner_name"/> <br>
@@ -54,12 +54,13 @@
     </form>
 
     {% if name %}
-    <h2>Name: {{name}} </h2>
+    <h2>Summoner Name: {{name}} </h2>
         <h4>Rank: {{rank}}</h4>
         <h4>Champions: </h4>
         
         <h3>Last Ten Games /W Performance:</h3>
-        {%for i in matches %}
+        {%for i in matches.part %}
+        {%for j in matches.gameInfo%}
         <table>
         <tr id="labels">
             <th>Summoner</th>
@@ -76,6 +77,10 @@
             <th>Total Minions Killed</th>
             <th>Item 1</th>
             <th>Item 2</th>
+           
+            <th>GameMode : {{j.0}} </th>
+            <th>Duration : {{j.1}}  Minutes</th>
+           
         </tr>
         <tr id="playerinfo">
             {% for player in i %}
@@ -93,10 +98,15 @@
             <td>{{ player.totalMinionsKilled }}</td>
             <td>{{ player.item0 }}</td>
             <td>{{ player.item1 }}</td> 
+
+           
             
         </tr>
         {%endfor%}
+        
         </table>
+       
+        {%endfor%}
         {%endfor%}
     {% endif %}
     
