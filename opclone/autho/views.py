@@ -183,19 +183,6 @@ def generate_playlist(streak_win):
         track_info.add((track_name, track_artists, track_duration))
 
     return track_info
- 
-    
-
-  # Create a new playlist on the user's account
-  #playlist = sp.user_playlist_create(user="USERNAME", name=playlist_name, public=True)
-  #playlist_id = playlist["id"]
-
-  # Add the tracks to the playlist
-  #track_uris = [track["uri"] for track in tracks["tracks"]["items"]]
-  #sp.user_playlist_add_tracks(user="USERNAME", playlist_id=playlist_id, tracks=track_uris)
-
-  #Return the playlist information
-  #return sp.user_playlist(user="USERNAME", playlist_id=playlist_id)
 
 
 ### Updates database to reflect user's new search history
