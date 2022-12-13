@@ -79,9 +79,7 @@
             <tr id="labels">
             <th>Summoner</th>
             <th>Champion</th>
-            <th>Spell1</th>
-            <th>Spell2</th>
-            <th>Wins</th>
+            <th>Victory</th>
             <th>Kills</th>
             <th>Deaths</th>
             <th>Assists</th>
@@ -89,8 +87,6 @@
             <th>Gold Earned</th>
             <th>Champion Level</th>
             <th>Total Minions Killed</th>
-            <th>Item 1</th>
-            <th>Item 2</th>
            
             <th>GameMode : {{j.0}} </th>
             <th>Duration : {{j.1}}  Minutes</th>
@@ -101,18 +97,14 @@
             
             <td id="summonername">{{ player.summoner }}</td>
             <td id="championname">{{ player.champion }}</td>
-            <td>{{player.spell1 }}</td>
-            <td>{{ player.spell2 }}</td>
             <td>{{ player.win}}</td>
             <td>{{ player.kills }}</td>
             <td>{{ player.deaths }}</td>
             <td>{{ player.assists }}</td>
             <td>{{ player.totalDamageDealt }}</td>
             <td>{{ player.goldEarned }}</td>
-            <td>{{player.champLevel }}</td>
-            <td>{{ player.totalMinionsKilled }}</td>
-            <td>{{ player.item0 }}</td>
-            <td>{{ player.item1 }}</td> 
+            <td style="text-align:center">{{player.champLevel }}</td>
+            <td style="text-align:center">{{ player.totalMinionsKilled }}</td>
 
            
             
