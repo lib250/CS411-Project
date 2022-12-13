@@ -19,7 +19,7 @@ from .models import SearchHistory
 #RGAPI-41cbb789-b621-4522-acef-e5211ecfc836
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
-api_key = 'RGAPI-2d9f1e23-cef3-4611-8af5-111d5c17c89e'
+api_key = ''
 valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1', 'ru', 'br1'}
         
 watcher = LolWatcher(api_key)
@@ -146,8 +146,8 @@ def match_creator(curr_summoner, list_matches, region):
 
 #Utilize the spotify API to generate a playlist based on a players current streak
 
-client_id = "2a11c7e917694457b815e054a962720b"
-client_secret = "4dab41e207834d4890fd37217afaf586"
+client_id = ""
+client_secret = ""
 redirect_uri = "http://127.0.0.1:8000/social/complete/spotify/"
 spotify = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret,redirect_uri=redirect_uri)
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)

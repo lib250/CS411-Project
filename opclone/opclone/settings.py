@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1=99nsj5-cu(akl)s!bgp_10l*lhrbg^=lp65zr5z=!t&5#hd&'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -148,6 +148,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Spotify
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_SPOTIFY_KEY = '2a11c7e917694457b815e054a962720b'
-SOCIAL_AUTH_SPOTIFY_SECRET = '4dab41e207834d4890fd37217afaf586'
+SOCIAL_AUTH_SPOTIFY_KEY = ''
+SOCIAL_AUTH_SPOTIFY_SECRET = ''
 SOCIAL_AUTH_SPOTIFY_SCOPE = ['user-read-email', 'user-library-read', 'playlist-modify-private']
