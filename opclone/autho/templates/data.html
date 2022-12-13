@@ -53,20 +53,24 @@
         <button type = "submit">Search</button> 
     </form>
 
-
-    {% for track_name, track_artists, track_duration in playlist %}
-        <hr>
-        <p>
-        <em>{{track_name}}</em> by {{track_artists}} <br>
-        {{track_duration}} <br>
-        </p>
-    {% endfor %}
-
     {% if name %}
     <h2>Summoner Name: {{name}} </h2>
         <h4>Rank: {{rank}}</h4>
-        <h4>Champions: </h4>
-        
+
+        {% if s_win %}
+            <p>This player is on a {{s_len}}-game winning streak.</p>
+        {% else %}
+            <p>This player is on a {{s_len}}-game losing streak.</p>
+        {% endif %}
+        <p>Songs for next game:</p>
+        {% for track_name, track_artists, track_duration in playlist %}
+            <hr>
+            <p>
+            <em>{{track_name}}</em> by {{track_artists}} <br>
+            {{track_duration}} <br>
+            </p>
+        {% endfor %}
+        <hr>
         <h3>Last Ten Games /W Performance:</h3>
         {%for i in matches.part %}
         {%for j in matches.gameInfo%}

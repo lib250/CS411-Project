@@ -70,9 +70,9 @@ def get_summoner(request):
         
         # Gets matches using puuid
         my_matches = watcher.match.matchlist_by_puuid(my_region, puuid, 0, 10)
-       
 
         last_10_games, streak_win, streak_len = match_creator(name, my_matches, my_region)
+        print('YERRRR', len(last_10_games))
         
         playlist = generate_playlist(streak_win)
         
