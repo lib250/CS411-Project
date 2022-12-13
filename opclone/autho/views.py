@@ -4,6 +4,12 @@ import requests
 from django.template import loader
 from django.contrib import messages
 from riotwatcher import LolWatcher, ApiError
+import spotipy
+import spotipy.oauth2
+from spotipy.oauth2 import SpotifyClientCredentials
+
+
+
 
 import json
 
@@ -136,9 +142,38 @@ def match_creator(curr_summoner, list_matches, region):
              
     return ten_match_detail, streak_win, streak_len
 
-    #HTML/CSS
-    def style(request):
-       return render(request,'style.css')
+#Utilize the spotify API to generate a playlist based on a players current streak
+
+client_id = "2a11c7e917694457b815e054a962720b"
+client_secret = "4dab41e207834d4890fd37217afaf586"
+redirect_uri = "http://127.0.0.1:8000/social/complete/spotify/"
+spotify = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret,redirect_uri=redirect_uri)
+client_credentials_manager = SpotifyClientCredentials(client_id="your-client-id", client_secret="your-client-secret")
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+
+
+def generate_playlist(streak_len):
+  if streak_len > 0:
+    # Player is on a winning streak, create a playlist of chill/laid-back songs
+    tracks = sp.search(q="genre:chill", type="track", limit=10)
+    playlist_name = "Winning Streak Playlist"
+  else:
+    # Player is on a losing streak, create a playlist of Hype/pump up songs
+    tracks = sp.search(q="genre:hype", type="track", limit=10)
+    playlist_name = "Losing Streak Playlist"
+
+  # Create a new playlist on the user's account
+  playlist = sp.user_playlist_create(user="USERNAME", name=playlist_name, public=True)
+  playlist_id = playlist["id"]
+
+  # Add the tracks to the playlist
+  track_uris = [track["uri"] for track in tracks["tracks"]["items"]]
+  sp.user_playlist_add_tracks(user="USERNAME", playlist_id=playlist_id, tracks=track_uris)
+
+  # Return the playlist information
+  return sp.user_playlist(user="USERNAME", playlist_id=playlist_id)
+
 
 ### Updates database to reflect user's new search history
 def update_database(username, summoner_name, region):
@@ -178,3 +213,8 @@ def update_database(username, summoner_name, region):
     
     history_entry.history = ';'.join(history)
     history_entry.save()
+
+    #HTML/CSS
+    def style(request):
+       return render(request,'style.css')
+
