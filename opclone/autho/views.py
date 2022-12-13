@@ -23,7 +23,7 @@ from .models import SearchHistory
 #RGAPI-41cbb789-b621-4522-acef-e5211ecfc836
 #Regions, inputted lower case
 #EUN1, EUW1	JP1	KR	LA1	LA2 NA1	OC1	TR1	RU BR1
-api_key = 'RGAPI-f0d7899d-b773-4378-a238-bbbe5ecf5375'
+api_key = 'RGAPI-2d9f1e23-cef3-4611-8af5-111d5c17c89e'
 valid_regions = {'eun1', 'euw1', 'jp1', 'kr', 'la1', 'la2', 'na1', 'oc1', 'tr1', 'ru', 'br1'}
         
 watcher = LolWatcher(api_key)
@@ -74,13 +74,15 @@ def get_summoner(request):
 
         last_10_games, streak_win, streak_len = match_creator(name, my_matches, my_region)
         
+        playlist = generate_playlist(streak_win)
+        
         ### Updates database to reflect user's new search history
         if request.user.is_authenticated:
             update_database(request.user.username, name, my_region)
        
         return render(request, 'data.html', {'history': user_search_history, 'response': ranked_stats, 
                                              'name': name, 'rank': rankTier, 'matches': last_10_games,
-                                             's_win': streak_win, 's_len': streak_len})
+                                             's_win': streak_win, 's_len': streak_len, 'playlist': playlist})
         
     else:
         return render(request, 'data.html', {'history': user_search_history})
@@ -151,22 +153,36 @@ client_id = "2a11c7e917694457b815e054a962720b"
 client_secret = "4dab41e207834d4890fd37217afaf586"
 redirect_uri = "http://127.0.0.1:8000/social/complete/spotify/"
 spotify = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret,redirect_uri=redirect_uri)
-client_credentials_manager = SpotifyClientCredentials(client_id="your-client-id", client_secret="your-client-secret")
+client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-def generate_playlist(streak_len):
-  if streak_len > 0:
-    # Player is on a winning streak, create a playlist of chill/laid-back songs
-    tracks = sp.search(q="genre:chill", type="track", limit=10)
-    playlist = "Winning Streak Playlist"
-  elif streak_len < 0:
-    # Player is on a losing streak, create a playlist of Hype/pump up songs
-    tracks = sp.search(q="genre:hype", type="track", limit=10)
-    playlist = "Losing Streak Playlist"
-  else:
-        # Player has no current streak (they are on a draw streak)
-        playlist = []
+def generate_playlist(streak_win):
+    if streak_win:
+        # Player is on a winning streak, create a playlist of chill/laid-back songs
+        tracks = sp.search(q="genre:chill", type="track", limit=10)
+    else:
+        # Player is on a losing streak, create a playlist of Hype/pump up songs
+        tracks = sp.search(q="genre:hype", type="track", limit=10)
+        
+    track_info = set()
+    
+    # Store track information as triples in a set
+    # Each track is represented by its name, artists, and its duration
+    for track in tracks['tracks']['items']:
+        track_name = track['name']
+        track_artists = track['artists']
+        track_duration_ms = track['duration_ms']
+        
+        track_artists = map(lambda x: x['name'], track_artists)
+        track_artists = ', '.join(track_artists)
+        
+        track_duration_s = track_duration_ms // 1000
+        seconds = track_duration_s % 60
+        seconds = '0' + str(seconds) if seconds < 10 else str(seconds)
+        track_duration = str(track_duration_s // 60) + ':' + seconds
+        track_info.add((track_name, track_artists, track_duration))
 
+    return track_info
  
     
 

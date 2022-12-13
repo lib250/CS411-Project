@@ -53,6 +53,15 @@
         <button type = "submit">Search</button> 
     </form>
 
+
+    {% for track_name, track_artists, track_duration in playlist %}
+        <hr>
+        <p>
+        <em>{{track_name}}</em> by {{track_artists}} <br>
+        {{track_duration}} <br>
+        </p>
+    {% endfor %}
+
     {% if name %}
     <h2>Summoner Name: {{name}} </h2>
         <h4>Rank: {{rank}}</h4>
