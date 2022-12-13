@@ -20,7 +20,7 @@
     <h1>League of Legends Tracker </h1>
   
     {% if user.is_authenticated %}
-        <p> Welcome, logged in as {{ user.username }} </p>
+        <p> Welcome, you are currently logged in as {{ user.username }}. </p>
 
         {% for entry in history %}
             <form action="" method="POST">
@@ -32,7 +32,7 @@
         {% endfor %}
 
         <br>
-        <p><a href="logout">Log Out</a></p>
+        <p id="logout"><a href="logout">Log Out</a></p>
     {% else %}
         <p> Log in to view recent searches: </p>
         <p id="a_spotify"><a href="{% url "social:begin" "spotify" %}">Login with Spotify</a></p>
@@ -69,8 +69,8 @@
             <th>Spell2</th>
             <th>Wins</th>
             <th>Kills</th>
-            <th>Death</th>
-            <th>Assist</th>
+            <th>Deaths</th>
+            <th>Assists</th>
             <th>Total Damage Dealt</th>
             <th>Gold Earned</th>
             <th>Champion Level</th>
