@@ -65,6 +65,10 @@ p {
 	text-align: center;
 }
 
+#logout {
+	font-size: 90%;
+}
+
 /* a */
 
 a {
@@ -97,6 +101,10 @@ b {
 }
 
 /* tr, th, td */
+
+td {
+	background-color: rgb(163, 163, 163);
+}
 
 #labels th {
     background-color: rgb(209, 220, 225);
