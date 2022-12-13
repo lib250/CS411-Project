@@ -7,6 +7,9 @@ from riotwatcher import LolWatcher, ApiError
 import spotipy
 import spotipy.oauth2
 from spotipy.oauth2 import SpotifyClientCredentials
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
 
 
 
@@ -151,28 +154,35 @@ spotify = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_
 client_credentials_manager = SpotifyClientCredentials(client_id="your-client-id", client_secret="your-client-secret")
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-
-
 def generate_playlist(streak_len):
   if streak_len > 0:
     # Player is on a winning streak, create a playlist of chill/laid-back songs
     tracks = sp.search(q="genre:chill", type="track", limit=10)
-    playlist_name = "Winning Streak Playlist"
-  else:
+    playlist = "Winning Streak Playlist"
+  elif streak_len < 0:
     # Player is on a losing streak, create a playlist of Hype/pump up songs
     tracks = sp.search(q="genre:hype", type="track", limit=10)
-    playlist_name = "Losing Streak Playlist"
+    playlist = "Losing Streak Playlist"
+  else:
+        # Player has no current streak (they are on a draw streak)
+        playlist = []
+
+ 
+    
+
+
+   
 
   # Create a new playlist on the user's account
-  playlist = sp.user_playlist_create(user="USERNAME", name=playlist_name, public=True)
-  playlist_id = playlist["id"]
+  #playlist = sp.user_playlist_create(user="USERNAME", name=playlist_name, public=True)
+  #playlist_id = playlist["id"]
 
   # Add the tracks to the playlist
-  track_uris = [track["uri"] for track in tracks["tracks"]["items"]]
-  sp.user_playlist_add_tracks(user="USERNAME", playlist_id=playlist_id, tracks=track_uris)
+  #track_uris = [track["uri"] for track in tracks["tracks"]["items"]]
+  #sp.user_playlist_add_tracks(user="USERNAME", playlist_id=playlist_id, tracks=track_uris)
 
-  # Return the playlist information
-  return sp.user_playlist(user="USERNAME", playlist_id=playlist_id)
+  #Return the playlist information
+  #return sp.user_playlist(user="USERNAME", playlist_id=playlist_id)
 
 
 ### Updates database to reflect user's new search history
